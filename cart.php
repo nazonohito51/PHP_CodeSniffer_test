@@ -71,4 +71,6 @@ class Cart
     }
 }
 
+echo 'testtesttest';
+
 ?>
