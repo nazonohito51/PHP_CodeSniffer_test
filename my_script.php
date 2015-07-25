@@ -13,7 +13,7 @@ foreach ($change_files as $file) {
         continue;
     }
     
-    $cmd = "php .\PHP_CodeSniffer\scripts\phpcbf --standard=PSR2 --encoding=utf-8 --extensions=php ${path}";
+    $cmd = "php .\PHP_CodeSniffer\scripts\phpcs --standard=config/PHP_CodeSniffer/ruleset.xml --encoding=utf-8 --extensions=php ${path}";
     $ret = passthru($cmd, $ret);
     //var_dump($output);
     //var_dump($ret);
