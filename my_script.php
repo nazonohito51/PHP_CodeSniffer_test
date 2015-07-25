@@ -3,14 +3,12 @@ $exit_val = 0;
 $script_path = '.\PHP_CodeSniffer\scripts';
 $ruleset_path = '.\config/PHP_CodeSniffer/ruleset.xml';
 $encoding = 'utf-8';
+$exec_extensions = array('php');
 
 $script = 'phpcs';
 if ($argv[1] == 1) {
     $script = 'phpcbf';
 }
-
-// 処理対象のextension指定
-$extensions = array('php');
 
 // masterブランチから変更されたファイルのみを抽出する
 $change_files = null;
@@ -21,7 +19,7 @@ foreach ($change_files as $file) {
     $path_info = pathinfo($file);
 
     // 処理対象のextensionでなければ無視する
-    if (!in_array($path_info['extension'], $extensions)) {
+    if (!in_array($path_info['extension'], $exec_extensions)) {
         continue;
     }
 
