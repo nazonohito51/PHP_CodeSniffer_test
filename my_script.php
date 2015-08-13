@@ -24,9 +24,13 @@ foreach ($change_files as $file) {
     }
 
     // phpcsの実行
-    $cmd = "php ${script_path}\\${script} --standard=${ruleset_path} --encoding=${encoding} ${path}";
-    passthru($cmd, $ret);
-
+    $cmd_cs = "php ${script_path}\\${script} --standard=${ruleset_path} --encoding=${encoding} ${path}";
+    passthru($cmd_cs, $ret);
+    $exit_val |= $ret;
+    
+    // 文法チェックの実行
+    $cmd_syntax_check = "php -l ${path}";
+    passthru($cmd_syntax_check, $ret);
     $exit_val |= $ret;
 }
 
