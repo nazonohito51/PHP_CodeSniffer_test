@@ -23,4 +23,6 @@
         <!-- Methodは必ずアクセス修飾子を記述しなければならない -->
         <exclude name="Squiz.Scope.MethodScope"/>
     </rule>
+
+    <rule ref="./config/PHP_CodeSniffer/Sniffs/TraceObjectVariant"/>
 </ruleset>
