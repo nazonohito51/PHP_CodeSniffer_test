@@ -1,7 +1,7 @@
 <?php
 $exit_val = 0;
 $script_path = '.\PHP_CodeSniffer\scripts';
-$ruleset_path = '.\config/PHP_CodeSniffer/ruleset.xml';
+$ruleset_path = '.\config\PHP_CodeSniffer\PSR2_Custom\ruleset.xml';
 $encoding = 'utf-8';
 $exec_extensions = array('php');
 
