@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset name="PHP5_Migration">
+    <description>The code analysis for version up to PHP5.</description>
+
+    <rule ref="./config/PHP_CodeSniffer/PHP5_Migration/Sniffs/TraceObjectVariant"/>
+</ruleset>
