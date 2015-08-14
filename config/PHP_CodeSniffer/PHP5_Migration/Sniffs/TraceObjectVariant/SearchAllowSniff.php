@@ -1,6 +1,6 @@
 <?php
 
-class PHP_CodeSniffer_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_CodeSniffer_Sniff
+class PHP5_Migration_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_CodeSniffer_Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -35,7 +35,7 @@ class PHP_CodeSniffer_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_
 
     private function assignObjectOnLine($tokens, $startPtr)
     {
-        // Šú‘Ò‚µ‚Ä‚¢‚éƒg[ƒNƒ“‚Ì•À‚Ñ‚ğ—ñ‹“
+        // æœŸå¾…ã—ã¦ã„ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã®ä¸¦ã³ã‚’åˆ—æŒ™
         $expectedTypes = array(
             array('T_EQUAL', 'T_NEW', 'T_STRING'),
             array('T_AND_EQUAL', 'T_NEW', 'T_STRING'),
@@ -44,14 +44,14 @@ class PHP_CodeSniffer_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_
         reset($expectedTypes);
 
         foreach ($expectedTypes as $expectedType) {
-            // ‘ÎÛƒg[ƒNƒ“`ƒZƒ~ƒRƒƒ“‚Ü‚Å‚Ìƒg[ƒNƒ“‚ğŒŸ¸‚µAŠú‘Ò‚µ‚Ä‚¢‚éƒg[ƒNƒ“‚Ì•À‚Ñ‚É‚È‚Á‚Ä‚¢‚é‚©Šm”F‚·‚é
+            // å¯¾è±¡ãƒˆãƒ¼ã‚¯ãƒ³ï½ã‚»ãƒŸã‚³ãƒ­ãƒ³ã¾ã§ã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æ¤œæŸ»ã—ã€æœŸå¾…ã—ã¦ã„ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã®ä¸¦ã³ã«ãªã£ã¦ã„ã‚‹ã‹ç¢ºèªã™ã‚‹
             for ($i = ($startPtr + 1); $tokens[$i]['type'] != 'T_SEMICOLON'; $i++) {
-                // ƒXƒy[ƒX•¶š‚Í–³‹‚·‚é
+                // ã‚¹ãƒšãƒ¼ã‚¹æ–‡å­—ã¯ç„¡è¦–ã™ã‚‹
                 if ($tokens[$i]['type'] === 'T_WHITESPACE') {
                     continue;
                 } else if ($tokens[$i]['type'] == current($expectedType)) {
                     if (next($expectedType) === false) {
-                        // Šú‘Ò‚µ‚Ä‚¢‚éƒg[ƒNƒ“‚Ìarray‚Ì––”ö‚Ü‚Å’B‚µ‚½Šú‘Ò‚µ‚½ƒg[ƒNƒ“‚Ì•À‚Ñ‚Å‚ ‚Á‚½‚Æ‚µ‚Ätrue‚ğ•Ô‚·
+                        // æœŸå¾…ã—ã¦ã„ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã®arrayã®æœ«å°¾ã¾ã§é”ã—ãŸï¼æœŸå¾…ã—ãŸãƒˆãƒ¼ã‚¯ãƒ³ã®ä¸¦ã³ã§ã‚ã£ãŸã¨ã—ã¦trueã‚’è¿”ã™
                         return true;
                     }
                 } else {
@@ -78,11 +78,11 @@ class PHP_CodeSniffer_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_
         $arrow_token    = $tokens[$stackPtr];
         $check_variable = $tokens[$stackPtr - 1]['content'];
 
-        // ŒŸ¸‘ÎÛ‚Ìƒg[ƒNƒ“‚ª'$this'‚Å‚ ‚èA‚©‚ÂClass“à•”‚ÌƒXƒR[ƒv‚Å‚ ‚ê‚Î–â‘è‚È‚¢‚Ì‚Å–³‹‚·‚é
+        // æ¤œæŸ»å¯¾è±¡ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒ'$this'ã§ã‚ã‚Šã€ã‹ã¤Classå†…éƒ¨ã®ã‚¹ã‚³ãƒ¼ãƒ—ã§ã‚ã‚Œã°å•é¡Œãªã„ã®ã§ç„¡è¦–ã™ã‚‹
         if ($check_variable == '$this') {
             $conditions = $arrow_token['conditions'];
 
-            // conditions––”ö‚©‚çƒ‹[ƒv‚ğ‰ñ‚µA'T_CLASS'‚ª‚È‚¢‚©Šm”F‚·‚é
+            // conditionsæœ«å°¾ã‹ã‚‰ãƒ«ãƒ¼ãƒ—ã‚’å›ã—ã€'T_CLASS'ãŒãªã„ã‹ç¢ºèªã™ã‚‹
             if (end($conditions) !== false) {
                 for (; prev($conditions) !== false;) {
                     $conditionsOwnerPtr = key($conditions);
@@ -93,7 +93,7 @@ class PHP_CodeSniffer_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_
             }
         }
 
-        // ƒ[ƒJƒ‹ƒXƒR[ƒv“à•”‚Å‚ ‚ê‚ÎAŠ‘®‚µ‚Ä‚¢‚éƒ[ƒJƒ‹ƒXƒR[ƒv‚Ìownerƒg[ƒNƒ“‚©‚çƒXƒR[ƒv”ÍˆÍ‚ğæ“¾‚µAŒŸ¸”ÍˆÍ‚Éw’è‚·‚é
+        // ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—å†…éƒ¨ã§ã‚ã‚Œã°ã€æ‰€å±ã—ã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—ã®ownerãƒˆãƒ¼ã‚¯ãƒ³ã‹ã‚‰ã‚¹ã‚³ãƒ¼ãƒ—ç¯„å›²ã‚’å–å¾—ã—ã€æ¤œæŸ»ç¯„å›²ã«æŒ‡å®šã™ã‚‹
         if (end($arrow_token['conditions']) !== false) {
             $ownerPtr = key($arrow_token['conditions']);
 
@@ -103,34 +103,34 @@ class PHP_CodeSniffer_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_
                 $end = $stackPtr;
             }
             else {
-                // ownerƒg[ƒNƒ“‚©‚çƒXƒR[ƒv”ÍˆÍ‚ªæ“¾‚Å‚«‚È‚¢‚Ì‚ÅAƒGƒ‰[
+                // ownerãƒˆãƒ¼ã‚¯ãƒ³ã‹ã‚‰ã‚¹ã‚³ãƒ¼ãƒ—ç¯„å›²ãŒå–å¾—ã§ããªã„ã®ã§ã€ã‚¨ãƒ©ãƒ¼
                 return false;
             }
         }
-        // ƒOƒ[ƒoƒ‹ƒXƒR[ƒv“à•”‚Å‚ ‚ê‚ÎAŒŸ¸”ÍˆÍ‚ğ‘S‘Ì‚Éw’è‚·‚é
+        // ã‚°ãƒ­ãƒ¼ãƒãƒ«ã‚¹ã‚³ãƒ¼ãƒ—å†…éƒ¨ã§ã‚ã‚Œã°ã€æ¤œæŸ»ç¯„å›²ã‚’å…¨ä½“ã«æŒ‡å®šã™ã‚‹
         else {
             $start = 0;
             //$end = $phpcsFile->numTokens;
             $end = $stackPtr;
         }
 
-        // ŒŸ¸”ÍˆÍ‚ğŒŸ¸‚·‚é
+        // æ¤œæŸ»ç¯„å›²ã‚’æ¤œæŸ»ã™ã‚‹
         for ($i = $start; $i < $end; $i++) {
-            // “r’†‚Å•ÊƒXƒR[ƒv‚Ìƒg[ƒNƒ“‚ªo‚Ä‚«‚Ä‚à–³‹‚·‚é
+            // é€”ä¸­ã§åˆ¥ã‚¹ã‚³ãƒ¼ãƒ—ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒå‡ºã¦ãã¦ã‚‚ç„¡è¦–ã™ã‚‹
             if ($arrow_token['conditions'] != $tokens[$i]['conditions']) {
                 continue;
             }
 
-            // ŒŸ¸‘ÎÛ‚Æ“¯–¼‚Ìƒg[ƒNƒ“‚ğ”­Œ©‚µ‚½‚çAnew‰‰Zq‚É‚æ‚é‰Šú‰»‚ªs‚í‚ê‚Ä‚¢‚é‚©Šm”F‚·‚é
+            // æ¤œæŸ»å¯¾è±¡ã¨åŒåã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ç™ºè¦‹ã—ãŸã‚‰ã€newæ¼”ç®—å­ã«ã‚ˆã‚‹åˆæœŸåŒ–ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‹ç¢ºèªã™ã‚‹
             if ($check_variable == $tokens[$i]['content']) {
                 if ($this->assignObjectOnLine($tokens, $i) === true) {
-                    // “¯ˆêƒXƒR[ƒv“à‚Ånew‰‰Zq‚É‚æ‚é‰Šú‰»‚ªs‚í‚ê‚Ä‚¢‚ê‚Î–â‘è‚È‚¢‚½‚ßŒŸ¸‚ğI—¹‚·‚é
+                    // åŒä¸€ã‚¹ã‚³ãƒ¼ãƒ—å†…ã§newæ¼”ç®—å­ã«ã‚ˆã‚‹åˆæœŸåŒ–ãŒè¡Œã‚ã‚Œã¦ã„ã‚Œã°å•é¡Œãªã„ãŸã‚æ¤œæŸ»ã‚’çµ‚äº†ã™ã‚‹
                     return;
                 }
             }
         }
 
-        // new‰‰Zq‚É‚æ‚é‰Šú‰»‚ªs‚í‚ê‚Ä‚¢‚È‚¢objectŒ^‚Ì•Ï”‚ğ”­Œ©‚µ‚½‚Æ‚µ‚ÄAŒx•ñ‚ğ‚ ‚°‚é
+        // newæ¼”ç®—å­ã«ã‚ˆã‚‹åˆæœŸåŒ–ãŒè¡Œã‚ã‚Œã¦ã„ãªã„objectå‹ã®å¤‰æ•°ã‚’ç™ºè¦‹ã—ãŸã¨ã—ã¦ã€è­¦å ±ã‚’ã‚ã’ã‚‹
         $warning = "${check_variable} is not initialized. Object type variable is assigned by reference over PHP5.0.x.";
         $phpcsFile->addWarning($warning, ($stackPtr - 1), 'NotInitializedObject');
     }

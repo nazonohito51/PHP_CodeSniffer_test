@@ -4,6 +4,7 @@ $script_path = '.\PHP_CodeSniffer\scripts';
 $ruleset_path = '.\config\PHP_CodeSniffer\PSR2_Custom\ruleset.xml';
 $encoding = 'utf-8';
 $exec_extensions = array('php');
+$php5_migration_ruleset_path = '.\config\PHP_CodeSniffer\PHP5_Migration\ruleset.xml';
 
 $script = 'phpcs';
 if ($argv[1] == 1) {
@@ -23,9 +24,14 @@ foreach ($change_files as $file) {
         continue;
     }
 
-    // phpcsの実行
-    $cmd_cs = "php ${script_path}\\${script} --standard=${ruleset_path} --encoding=${encoding} ${path}";
-    passthru($cmd_cs, $ret);
+    // PSR2_Customのチェック
+    $cmd_psr2_cs = "php ${script_path}\\${script} --standard=${ruleset_path} --encoding=${encoding} ${path}";var_dump($cmd_psr2_cs);
+    passthru($cmd_psr2_cs, $ret);
+    $exit_val |= $ret;
+
+    // PHP5_Migrationのチェック
+    $cmd_php5_cs = "php ${script_path}\\${script} --standard=${php5_migration_ruleset_path} --encoding=${encoding} ${path}";var_dump($cmd_php5_cs);
+    passthru($cmd_php5_cs, $ret);
     $exit_val |= $ret;
     
     // 文法チェックの実行
