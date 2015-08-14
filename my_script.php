@@ -25,12 +25,12 @@ foreach ($change_files as $file) {
     }
 
     // PSR2_Customのチェック
-    $cmd_psr2_cs = "php ${script_path}\\${script} --standard=${ruleset_path} --encoding=${encoding} ${path}";var_dump($cmd_psr2_cs);
+    $cmd_psr2_cs = "php ${script_path}\\${script} --standard=${ruleset_path} --encoding=${encoding} ${path}";
     passthru($cmd_psr2_cs, $ret);
     $exit_val |= $ret;
 
     // PHP5_Migrationのチェック
-    $cmd_php5_cs = "php ${script_path}\\${script} --standard=${php5_migration_ruleset_path} --encoding=${encoding} ${path}";var_dump($cmd_php5_cs);
+    $cmd_php5_cs = "php ${script_path}\\${script} --standard=${php5_migration_ruleset_path} --encoding=${encoding} ${path}";
     passthru($cmd_php5_cs, $ret);
     $exit_val |= $ret;
     
