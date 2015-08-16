@@ -33,18 +33,6 @@ class PHP5_Migration_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_C
         return array(T_OBJECT_OPERATOR);
     }
 
-    private function checkSearchableConditions($conditions, $targetConditions)
-    {
-        $diffConditions = array_diff($targetConditions, $conditions);
-
-        // conditionsと同一ならOK
-        // conditionsよりもcountが少ない場合、全て同一ならOK
-        // conditionsよりもcountが少ないか同一の場合で、一部異なっていたらNG
-        // conditionsよりもcountが多い場合、NG
-
-        // targetConditionsをベースにループを回す？
-    }
-
     private function assignObjectOnLine($tokens, $startPtr)
     {
         // 期待しているトークンの並びを列挙
@@ -89,6 +77,11 @@ class PHP5_Migration_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_C
         $tokens         = $phpcsFile->getTokens();
         $arrow_token    = $tokens[$stackPtr];
         $check_variable = $tokens[$stackPtr - 1]['content'];
+
+        $ignoredVariableNames = array('$smarty', '$db', '$master_db', '$jugemkey_db', '$jugemkey_master_db', '$jugemkey_slave_db');
+        if (in_array($check_variable, $ignoredVariableNames) === true) {
+            return;
+        }
 
         // 検査対象のトークンが'$this'であり、かつClass内部のスコープであれば問題ないので無視する
         if ($check_variable == '$this') {
