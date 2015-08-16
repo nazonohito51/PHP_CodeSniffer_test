@@ -33,6 +33,18 @@ class PHP5_Migration_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_C
         return array(T_OBJECT_OPERATOR);
     }
 
+    private function checkSearchableConditions($conditions, $targetConditions)
+    {
+        $diffConditions = array_diff($targetConditions, $conditions);
+
+        // conditionsと同一ならOK
+        // conditionsよりもcountが少ない場合、全て同一ならOK
+        // conditionsよりもcountが少ないか同一の場合で、一部異なっていたらNG
+        // conditionsよりもcountが多い場合、NG
+
+        // targetConditionsをベースにループを回す？
+    }
+
     private function assignObjectOnLine($tokens, $startPtr)
     {
         // 期待しているトークンの並びを列挙
@@ -95,7 +107,26 @@ class PHP5_Migration_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_C
 
         // ローカルスコープ内部であれば、所属しているローカルスコープのownerトークンからスコープ範囲を取得し、検査範囲に指定する
         if (end($arrow_token['conditions']) !== false) {
-            $ownerPtr = key($arrow_token['conditions']);
+            $ignoredOwnerType = array('T_IF', 'T_ELSEIF', 'T_ELSE', 'T_FOREACH', 'T_FOR', 'T_DO', 'T_WHILE', 'T_SWITCH', 'T_DEFAULT', 'T_CASE');
+            while (1) {
+                $ownerPtr = key($arrow_token['conditions']);
+
+                // ownerが変数スコープを分けないものであれば、さらに上のスコープを見に行く
+                if (in_array($tokens[$ownerPtr]['type'], $ignoredOwnerType)) {
+                }
+                else {
+                    $start = $tokens[$ownerPtr]['scope_opener'];
+                    $end = $stackPtr;
+                    break;
+                }
+                // 一番上まで見終わったら、それはグローバルスコープ
+                $prev_conditions = prev($arrow_token['conditions']);
+                if ($prev_conditions === false) {
+                    $start = 0;
+                    $end = $stackPtr;
+                    break;
+                }
+            }
 
             if (isset($tokens[$ownerPtr]['scope_opener']) && isset($tokens[$ownerPtr]['scope_closer'])) {
                 $start = $tokens[$ownerPtr]['scope_opener'];
@@ -117,7 +148,8 @@ class PHP5_Migration_Sniffs_TraceObjectVariant_SearchAllowSniff implements PHP_C
         // 検査範囲を検査する
         for ($i = $start; $i < $end; $i++) {
             // 途中で別スコープのトークンが出てきても無視する
-            if ($arrow_token['conditions'] != $tokens[$i]['conditions']) {
+            $diffConditions = array_diff($tokens[$i]['conditions'], $arrow_token['conditions']);
+            if (count($diffConditions) === 0) {
                 continue;
             }
 
