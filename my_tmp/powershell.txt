@@ -1,0 +1,5 @@
+php .\PHP_CodeSniffer\scripts\phpcs --standard=.\config/PHP_CodeSniffer/ruleset.xml --encoding=utf-8 test_dir/test_dir.php
+php .\PHP_CodeSniffer\scripts\phpcs --standard=.\config/PHP_CodeSniffer/ruleset.xml --encoding=EUC-JP test_dir/test_dir.php
+
+Get-ChildItem -recurse -include *.php C:\Works\Programming\php\users | select-object fullname | % { php .\PHP_CodeSniffer\scripts\phpcs --standard=.\config/PHP_CodeSniffer/ruleset.xml --encoding=EUC-JP $_ }
+(Get-ChildItem -recurse -include *.php C:\Works\Programming\php\users\manage).fullname | % { php .\PHP_CodeSniffer\scripts\phpcs --standard=.\config/PHP_CodeSniffer/PHP5_Migration/ruleset.xml --encoding=EUC-JP $_ }
